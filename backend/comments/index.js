@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.json({ message: "Comments service is running easily" });
+  res.json({ message: "Comments service is running" });
 });
 
 app.listen(PORT, () => {
