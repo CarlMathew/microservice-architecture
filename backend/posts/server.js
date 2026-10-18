@@ -7,14 +7,7 @@ import database from "./src/config/database.js";
 import redis from "./src/config/redis.js";
 import { producer } from "./src/config/kafka.js";
 
-const app = express();
 const PORT = process.env.PORT || 3001;
-app.use(cors());
-app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.json({ message: "Post service is running" });
-});
 
 async function startServer() {
   try {
