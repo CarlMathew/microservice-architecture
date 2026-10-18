@@ -1,10 +1,11 @@
 import "dotenv/config";
-import express from "express";
-import cors from "cors";
 
+import app from "./app.js";
 import database from "./config/database.js";
-import redis from "./config/redis.js";
-import { producer } from "./config/kafka.js";
+
+import database from "./src/config/database.js";
+import redis from "./src/config/redis.js";
+import { producer } from "./src/config/kafka.js";
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,8 +18,9 @@ app.get("/", (req, res) => {
 
 async function startServer() {
   try {
-    await database.query("SELECT 1");
-    console.log("PostgreSQL Connected");
+    await database.authenticate();
+    console.log("PostgreSQL connected");
+    await database.sync();
 
     await redis.connect();
     console.log("Redis Connected");
@@ -30,7 +32,7 @@ async function startServer() {
       console.log(`App is listening on PORT ${PORT}`);
     });
   } catch (error) {
-    console.error("Startup Failed: ", error);
+    console.error("Failed to start the server: ", error);
     process.exit(1);
   }
 }
