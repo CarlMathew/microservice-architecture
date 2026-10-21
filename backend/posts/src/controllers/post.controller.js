@@ -21,6 +21,12 @@ export const createPost = async (req, res) => {
 export const getPosts = async (req, res) => {
   try {
     const posts = await postService.getPosts();
+
+    if (posts.length == 0) {
+      res.status(404).json({
+        message: "No Post found",
+      });
+    }
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);

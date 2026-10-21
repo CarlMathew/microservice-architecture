@@ -34,7 +34,7 @@ services:
         - "3001:3000"
     environment:
       PORT: 3000
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/app
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/posts
       KAFKA_BROKER: kafka:9093
       REDIS_URL: redis://redis:6379
     depends_on:
@@ -72,7 +72,7 @@ services:
         - "3002:3000"
     environment:
       PORT: 3000
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/app
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/comments
       KAFKA_BROKER: kafka:9093
       REDIS_URL: redis://redis:6379
     depends_on:
