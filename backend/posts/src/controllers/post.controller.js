@@ -8,11 +8,11 @@ export const createPost = async (req, res) => {
       title,
     });
 
-    res.status(201).json(post);
+    return res.status(201).json(post);
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({
+    return res.status(500).json({
       message: "Failed to create post",
     });
   }
@@ -27,11 +27,12 @@ export const getPosts = async (req, res) => {
         message: "No Post found",
       });
     }
-    res.status(200).json(posts);
+
+    return res.status(200).json(posts);
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({
+    return res.status(500).json({
       message: "Failed to get posts",
     });
   }
