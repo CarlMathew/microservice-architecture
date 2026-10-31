@@ -22,7 +22,7 @@ resource "kubernetes_deployment_v1" "frontend" {
       spec {
         container {
           name  = "frontend"
-          image = "carlito027/frotnend:latest"
+          image = "carlito027/frontend:latest"
 
           image_pull_policy = "Always"
 
