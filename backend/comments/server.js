@@ -7,17 +7,39 @@ import { producer } from "./src/config/kafka.js";
 
 const PORT = process.env.PORT || 3002;
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function retryConnection(name, connectFn, delay = 5000) {
+  while (true) {
+    try {
+      await connectFn();
+      console.log(`${name} connected`);
+      return;
+    } catch (error) {
+      console.error(`${name} unavailable. Retrying in ${delay / 1000}s...`);
+      await sleep(delay);
+    }
+  }
+}
+
 async function startServer() {
   try {
-    await database.authenticate();
-    console.log("PostgreSQL connected");
-    await database.sync();
+    // PostgreSQL
 
-    await redis.connect();
-    console.log("Redis Connected");
+    await retryConnection("Postgres", async () => {
+      await database.authenticate();
+      await database.sync();
+    });
 
-    await producer.connect();
-    console.log("Kafka produce connected");
+    await retryConnection("Redis", async () => {
+      if (!redis.isOpen) {
+        await redis.connect();
+      }
+    });
+
+    await retryConnection("Kafka", async () => {
+      await producer.connect();
+    });
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`App is listening on PORT ${PORT}`);
